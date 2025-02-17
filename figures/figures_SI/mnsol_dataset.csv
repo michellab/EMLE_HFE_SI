@@ -1,0 +1,21 @@
+Solute,Smiles,Exp [kcal/mol],Uncertainity [kcal/mol]
+n-pentane,CCCCC,2.33,0.20
+n-octane,CCCCCCCC,2.89,0.20
+benzene,c1ccccc1,-0.87,0.20
+naphthalene,c1ccc2ccccc2c1,-2.39,0.20
+water,O,-6.31,0.20
+methanol,CO,-5.11,0.20
+o-cresol,Cc1ccccc1O,-5.87,0.20
+aceticacid,CC(O)=O,-6.70,0.20
+"1,4-dioxane",C1COCCO1,-5.05,0.20
+methylpentanoate,CCCCC(=O)OC,-2.57,0.20
+methylbenzoate,COC(=O)c1ccccc1,-3.91,0.20
+2-pentanone,CCCC(C)=O,-3.53,0.20
+ethylphenylether,CCOc1ccccc1,-2.22,0.20
+m-hydroxybenzaldehyde,Oc1cccc(C=O)c1,-9.51,0.20
+acetonitrile,CC#N,-3.89,0.20
+pyridine,c1ccncc1,-4.70,0.20
+aniline,Nc1ccccc1,-5.49,0.20
+benzamide,NC(=O)c1ccccc1,-10.90,0.20
+1-propanethiol,CCCS,-1.05,0.20
+thioanisole,CSc1ccccc1,-2.73,0.20
