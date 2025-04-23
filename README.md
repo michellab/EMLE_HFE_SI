@@ -4,8 +4,8 @@ This repository contains the supporting data, models, and figure generation code
 
 ## Directory Structure
 
--   `data/`: Contains the datasets used for training and testing the machine learning models, along with training logs.
--   `emle_models/`: Contains the various EMLE models developed or used in this study.
+-   `data/`: Contains the datasets used for training and testing the EMLE models, along with training logs.
+-   `emle_models/`: Contains the various EMLE models trained and used in this study.
 -   `figures/`: Includes Jupyter notebooks used to generate the figures presented in the publication, along with the figures themselves.
 
 ## Dependencies
