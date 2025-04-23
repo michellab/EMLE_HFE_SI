@@ -1,7 +1,31 @@
-# EMLE_HFE_SI
+# Enhancing Electrostatic Embedding for ML/MM Free Energy Calculations
 
-## Directory structure
+This repository contains the supporting data, models, and figure generation code for the publication titled "Enhancing Electrostatic Embedding for ML/MM Free Energy Calculations".
 
-- emle_models
-- figures: 
-- data: 
+## Directory Structure
+
+-   `data/`: Contains the datasets used for training and testing the machine learning models, along with training logs.
+-   `emle_models/`: Contains the various EMLE models developed or used in this study.
+-   `figures/`: Includes Jupyter notebooks used to generate the figures presented in the publication, along with the figures themselves.
+
+## Dependencies
+
+
+-   Python
+- 
+
+## Citation
+
+If you use the code, data, or models from this repository in your research, please cite the following publication:
+
+``` bibtex
+@article{Morado2025,
+  title   = {Enhancing Electrostatic Embedding for ML/MM Free Energy Calculations},
+  author  = {Author 1 and Author 2 and ...},
+  journal = {Journal Name},
+  year    = {Year},
+  volume  = {Volume},
+  pages   = {Pages},
+  doi     = {DOI}
+}
+```
