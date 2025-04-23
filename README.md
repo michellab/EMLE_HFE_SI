@@ -14,6 +14,11 @@ This repository contains the supporting data, models, and figure generation code
 -   Python
 - 
 
+# Associated Packages
+
+- [`fes-ml`](https://github.com/michellab/fes-ml): Enables hybrid ML/MM free energy calculations, with support for various alchemical modifications.
+- [`emle-engine`](https://github.com/michellab/fes-ml): A package which streamlines the training of EMLE models by automatic conformer sampling, QM energy evaluations, and parameter fitting, with modular components for flexible use.
+
 ## Citation
 
 If you use the code, data, or models from this repository in your research, please cite the following publication:
