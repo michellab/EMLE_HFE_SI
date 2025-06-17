@@ -2,6 +2,8 @@
 
 This repository contains the supporting data, models, and figure generation code for the publication titled "Enhancing Electrostatic Embedding for ML/MM Free Energy Calculations".
 
+![image info](./figures/toc_graphics/toc_graphic.pdf)
+
 ## Directory Structure
 
 -   `data/`: Contains the datasets used for training and testing the EMLE models, along with training logs.
@@ -10,11 +12,19 @@ This repository contains the supporting data, models, and figure generation code
 
 ## Dependencies
 
+The following packages are required to run the notebooks in this repository:
 
--   Python
-- 
+- numpy
+- pandas
+- scipy
+- matplotlib
+- seaborn
+- scikit-learn
+- torch
+- rdkit
+- emle-engine
 
-# Associated Packages
+## Associated Packages
 
 - [`fes-ml`](https://github.com/michellab/fes-ml): Enables hybrid ML/MM free energy calculations, with support for various alchemical modifications.
 - [`emle-engine`](https://github.com/michellab/fes-ml): A package which streamlines the training of EMLE models by automatic conformer sampling, QM energy evaluations, and parameter fitting, with modular components for flexible use.
