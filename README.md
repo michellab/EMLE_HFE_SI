@@ -2,6 +2,8 @@
 
 This repository contains the supporting data, models, and figure generation code for the publication titled "Enhancing Electrostatic Embedding for ML/MM Free Energy Calculations".
 
+[Abstract](abstract.png)
+
 ## Directory Structure
 
 -   `data/`: Contains the datasets used for training and testing the EMLE models, along with training logs.
