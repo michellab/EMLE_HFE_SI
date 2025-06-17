@@ -2,7 +2,7 @@
 
 This repository contains the supporting data, models, and figure generation code for the publication titled "Enhancing Electrostatic Embedding for ML/MM Free Energy Calculations".
 
-[Abstract](./abstract.png)
+![Abstract](./abstract.png)
 
 ## Directory Structure
 
