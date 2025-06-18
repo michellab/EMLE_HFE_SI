@@ -27,7 +27,7 @@ The following packages are required to run the notebooks in this repository:
 ## Associated Packages
 
 - [`fes-ml`](https://github.com/michellab/fes-ml): Enables hybrid ML/MM free energy calculations, with support for various alchemical modifications.
-- [`emle-engine`](https://github.com/michellab/fes-ml): A package which streamlines the training of EMLE models by automatic conformer sampling, QM energy evaluations, and parameter fitting, with modular components for flexible use.
+- [`emle-bespoke`](https://github.com/michellab/emle-bespoke): A package which streamlines the training of EMLE models by automatic conformer sampling, QM energy evaluations, and parameter fitting, with modular components for flexible use.
 
 ## Citation
 
