@@ -1,4 +1,4 @@
-# Input Scripts for Running ML/MM Simulations with fes-ml
+# Input scripts for running ML/MM simulations with fes-ml
 
 This repository contains input scripts for performing ML/MM simulations using `fes-ml`.  
 Each directory corresponds to a different simulation setup.  
