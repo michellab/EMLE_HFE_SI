@@ -1,0 +1,219 @@
+# Define command line arguments for the script
+import argparse
+
+# Create an ArgumentParser object
+parser = argparse.ArgumentParser(description="Example command-line interface")
+
+# Define the arguments the program accepts
+parser.add_argument("script", help="Path to the input file")
+parser.add_argument("window", help="Path to the output file")
+parser.add_argument(
+    "-solu",
+    "--solute",
+    type=str,
+    default="c1ccccc1",
+    help="SMILES string of the solute",
+)
+parser.add_argument(
+    "-solvent",
+    "--solvent",
+    type=str,
+    default="C1CCCCC1",
+    help="SMILES string of the solvent",
+)
+parser.add_argument(
+    "-d", "--density", type=float, default=0.779, help="Density of the system"
+)
+parser.add_argument(
+    "-n", "--niterations", type=int, default=5000, help="Number of iterations"
+)
+parser.add_argument(
+    "-r", "--restart", type=bool, default=False, help="Restart the simulation"
+)
+
+parser.add_argument(
+    "-emle", "--emle-model", type=str, default=None, help="EMLE model to use"
+)
+
+# Parse the command-line arguments
+args = parser.parse_args()
+
+if __name__ == "__main__":
+    import numpy as np
+    from openff.units import unit as offunit
+    from openff.interchange.components._packmol import UNIT_CUBE
+    import openmm.app as app
+    import openmm.unit as unit
+    import torch
+    from fes_ml import FES, MTS
+
+    torch.inverse(torch.ones((1, 1), device="cuda:0"))
+
+    # Command-line arguments
+    solute = str(args.solute)
+    solvent = str(args.solvent)
+    density = float(args.density)
+    niterations = int(args.niterations)
+    restart = bool(args.restart)
+    script = str(args.script)
+    window = int(args.window)
+
+    # Fancy print command-line arguments
+    print("Command-line arguments:")
+    print(f"Solute: {solute}")
+    print(f"Solvent: {solvent}")
+    print(f"Density: {density}")
+    print(f"Number of iterations: {niterations}")
+    print(f"Restart: {restart}")
+    print(f"Script: {script}")
+    print(f"Window: {window}")
+
+    # --------------------------------------------------------------- #
+    # Define the parameters
+    # --------------------------------------------------------------- #
+    # Set up the alchemical modifications
+    # Available modifications are:
+    # - ChargeScaling: scale the charges of the solute
+    # - LJSoftCore: add a LJ softcore potential to the solute-solvent interactions
+    # - MLCorrection: add a delta ML correction to the MM energy
+    # - MLInterpolation: interpolate between ML and MM potentials
+    # - EMLEPotential: add an EMLE potential to the system
+    n_ml = 6
+    ml_windows = np.linspace(1.0, 0.0, n_ml)
+
+    lambda_schedule = {"MLInterpolation": ml_windows}
+
+    # Modifications kwargs
+    # This dictionary is used to pass additional kwargs to the modifications
+    # The keys are the name of the modification and the values are dictionaries with kwargs
+    modifications_kwargs = {
+        "MLPotential": {"name": "mace-off23-small"},
+    }
+
+    # Define variables that are used in several places to avoid errors
+    temperature = 298.15 * unit.kelvin
+    dt = 1.0 * unit.femtosecond
+
+    # Set up the mdconfig dictionary for the simulations
+    # This is the default mdconfig dictionary, meaning that if this dictionary
+    # is not passed to the FES object, these are the values that will be used.
+    mdconfig_dict = {
+        "periodic": True,
+        "constraints": "h-bonds",
+        "vdw_method": "cutoff",
+        "vdw_cutoff": offunit.Quantity(12.0, "angstrom"),
+        "mixing_rule": "lorentz-berthelot",
+        "switching_function": True,
+        "switching_distance": offunit.Quantity(11.0, "angstrom"),
+        "coul_method": "pme",
+        "coul_cutoff": offunit.Quantity(12.0, "angstrom"),
+    }
+
+    # Packmol kwargs
+    packmol_kwargs = {
+        "box_shape": UNIT_CUBE,
+        "target_density": density * offunit.gram / offunit.milliliter,
+    }
+
+    # MTS logics
+    use_mts = False
+    intermediate_steps = 4
+    inner_steps = 2
+    if use_mts:
+        # Create the MTS class if intermediate steps are defined
+        mts = MTS()
+        # Multiple time step Langevin integrator
+        timestep_groups = [(0, 2), (1, intermediate_steps)]
+        if inner_steps:
+            timestep_groups.append((2, inner_steps))
+        integrator = mts.create_integrator(
+            dt=dt, groups=timestep_groups, temperature=temperature
+        )
+    else:
+        # The strategy will know how to create the integrator
+        integrator = None
+
+    # Define the kwargs for the creation of the alchemical states
+    # Alternatively, these kwargs can be passed directly to the create_alchemical_states method
+    # This uses OpenMM units
+    create_alchemical_states_kwargs = {
+        "smiles_ligand": solute,
+        "smiles_solvent": solvent,
+        "integrator": integrator,
+        "forcefields": ["openff_unconstrained-2.0.0.offxml", "tip3p.offxml"],
+        "temperature": temperature,
+        "timestep": dt,  # ignored if integrator is passed
+        "pressure": 1.0 * unit.atmospheres,
+        "hydrogen_mass": 1.007947 * unit.amu,  # use this for HMR
+        "mdconfig_dict": mdconfig_dict,
+        "modifications_kwargs": modifications_kwargs,
+        "packmol_kwargs": packmol_kwargs,
+    }
+
+    # Simulation parameters
+    n_equil_steps = 10000  # 10 ps equilibration
+    n_iterations = niterations
+    n_steps_per_iter = 1000  # 1 ps per iteration
+    simulation_reporters = []
+    simulation_reporters.append(
+        app.StateDataReporter(
+            f"stdout_{window}.txt",
+            100,
+            step=True,
+            potentialEnergy=True,
+            kineticEnergy=True,
+            totalEnergy=True,
+            temperature=True,
+            speed=True,
+            volume=True,
+            density=True,
+            append=restart,
+        )
+    )
+    simulation_reporters.append(
+        app.DCDReporter(
+            f"trajectory_{window}.dcd",
+            1000,
+            append=restart,
+        )
+    )
+
+    # --------------------------------------------------------------- #
+    # Prepare and run the simulations
+    # --------------------------------------------------------------- #
+    # Create the FES object and add the alchemical states
+    fes = FES()
+    fes.create_alchemical_states(
+        strategy_name="openff",
+        lambda_schedule=lambda_schedule,
+        **create_alchemical_states_kwargs,
+    )
+
+    # Set the force groups for the alchemical states
+    if use_mts:
+        mts.set_force_groups(
+            alchemical_states=fes.alchemical_states,
+            slow_forces=["MLCorrection"],
+            fast_force_group=0,
+            slow_force_group=1,
+        )
+
+    if not restart:
+        # Minimize the state of interest
+        fes.minimize(window=window)
+
+        # Set initial velocities
+        fes.set_velocities(temperature=temperature, window=window)
+
+        # Equilibrate the state of interest
+        fes.equilibrate(n_equil_steps, window=window)
+
+    # Run single state
+    U_kn = fes.run_single_state(
+        niterations=n_iterations,
+        nsteps=n_steps_per_iter,
+        window=int(window),
+        reporters=simulation_reporters,
+    )
+
+    np.save(f"{script}_{window}.npy", np.asarray(U_kn))
