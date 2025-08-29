@@ -9,20 +9,7 @@ This repository contains the supporting data, models, and figure generation code
 -   `data/`: Contains the datasets used for training and testing the EMLE models, along with training logs.
 -   `emle_models/`: Contains the various EMLE models trained and used in this study.
 -   `figures/`: Includes Jupyter notebooks used to generate the figures presented in the publication, along with the figures themselves.
-
-## Dependencies
-
-The following packages are required to run the notebooks in this repository:
-
-- numpy
-- pandas
-- scipy
-- matplotlib
-- seaborn
-- scikit-learn
-- torch
-- rdkit
-- emle-engine
+-   `inputs/`: Contains inputs scripts.
 
 ## Associated Packages
 
