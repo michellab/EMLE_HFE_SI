@@ -1,6 +1,6 @@
 # Enhancing Electrostatic Embedding for ML/MM Free Energy Calculations
 
-This repository contains the supporting data, models, and figure generation code for the publication titled "Enhancing Electrostatic Embedding for ML/MM Free Energy Calculations".
+This repository contains the supporting data, models, and figure generation code for the publication titled ["Enhancing Electrostatic Embedding for ML/MM Free Energy Calculations"](https://pubs.acs.org/doi/10.1021/acs.jctc.5c01464).
 
 ![Abstract](./abstract.png)
 
