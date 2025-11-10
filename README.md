@@ -32,5 +32,6 @@ If you use the code, data, or models from this repository in your research, plea
   year={2025}, 
   month=nov, 
   pages={acs.jctc.5c01464}, 
-  language={en} }
+  language={en} 
+}
 ```
