@@ -20,7 +20,11 @@ This repository contains the supporting data, models, and figure generation code
 
 If you use the code, data, or models from this repository in your research, please cite the following publication:
 
-``` bibtex
+```
+Morado, J.; Zinovjev, K.; Hedges, L. O.; Cole, D. J.; Michel, J. Enhancing Electrostatic Embedding for ML/MM Free Energy Calculations. J. Chem. Theory Comput. 2025, 21 (22), 11805–11819. https://doi.org/10.1021/acs.jctc.5c01464.
+```
+
+```bibtex
 @article{Morado2025, 
   title={Enhancing Electrostatic Embedding for ML/MM Free Energy Calculations}, 
   volume={21}, 
